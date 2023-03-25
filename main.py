@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 
 import os
 #Import TfIdfVectorizer from scikit-learn
@@ -15,11 +12,8 @@ from sklearn.metrics.pairwise import linear_kernel
 
 
 
-# df1=pd.read_csv('tmdb_5000_credits.csv')
-df2=pd.read_csv('tmdb_5000_movies.csv')
+df2=pd.read_csv('movie.csv')
 
-# df1.columns = ['id','title','cast','crew']
-# df2= df2.merge(df1,on='id')
 
 C= df2['vote_average'].mean()
 m= df2['vote_count'].quantile(0.9)
@@ -45,9 +39,6 @@ df2['overview'] = df2['overview'].fillna('')
 tfidf_matrix = tfidf.fit_transform(df2['overview'])
 
 #Output the shape of tfidf_matrix
-
-
-
 # Compute the cosine similarity matrix
 cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 
@@ -87,7 +78,10 @@ def home():
 @app.route("/recommend")
 def recommend():
     movie = request.args.get('movie')
+    print(movie)
     r = get_recommendations(movie)
+    print("hello")
+    print(r)
     if type(r)==type('string'):
         return render_template('recommend.html',movie=movie,r=r,t='s')
     else:
